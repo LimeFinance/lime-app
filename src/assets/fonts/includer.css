@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Avenir";
+  src: local("Avenir"), local("Avenir"), url("./AvenirLTStd-Black.otf") format("opentype");
+}
+@font-face {
+  font-family: "Avenir-regular";
+  src: local("Avenir-regular"), local("Avenir-regular"),
+    url("./AvenirLTStd-Roman.otf") format("opentype");
+}
