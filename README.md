@@ -1,3 +1,3 @@
-# LIME.finance app
+# lime-app
 
-The main app!
+The main create-react-app located at app.lemonfinance.org
