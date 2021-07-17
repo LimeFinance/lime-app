@@ -1,6 +1,6 @@
 import BN from "bn.js";
-export const PROVIDER_URL = "http://localhost:8545"; //"https://data-seed-prebsc-1-s1.binance.org:8545/"; // testnet for now
-export const DEFAULT_NET = "local";
+export const PROVIDER_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // testnet for now
+export const DEFAULT_NET = "TESTNET";
 export const DAY_SECONDS = 86400;
 export const ONE_ETHER = new BN("1000000000000000000");
 export const ADDRESSES = {
