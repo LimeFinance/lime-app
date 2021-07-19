@@ -19,6 +19,7 @@ import { IConnectionInfo, IAlert, IHarvestingContext } from "./core/typescript/i
 import { PriceContext } from "./core/context/priceContext";
 import BN from "bn.js";
 import { HarvestingContext } from "./core/context/harvestingContext";
+import Audits from "./pages/Audits";
 
 const App = () => {
   const [web3, setWeb3] = useState<IConnectionInfo>({
@@ -82,6 +83,9 @@ const App = () => {
                     </Route>
                     <Route path={"/farm/"} exact={true}>
                       <Farm />
+                    </Route>
+                    <Route path={"/audits/"} exact={true}>
+                      <Audits />
                     </Route>
                   </Switch>
                 </Container>
