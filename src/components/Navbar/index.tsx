@@ -61,6 +61,13 @@ const Navbar = () => {
         message: "Please connect to BSC to use the dApp",
       });
       web3 = new Web3(PROVIDER_URL);
+    } else if (network === "mainnet") {
+      pushAlert({
+        type: "error",
+        message: "Mainnet is not supported yet. Please switch to testnet.",
+      });
+      network = "invalid";
+      web3 = new Web3(PROVIDER_URL);
     } else {
       _account = (await web3.eth.getAccounts())[0];
       pushAlert({
