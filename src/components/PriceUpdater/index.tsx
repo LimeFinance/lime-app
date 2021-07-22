@@ -14,9 +14,8 @@ const PriceUpdater = () => {
   const [, setPrice] = useContext(PriceContext);
 
   const _fetchPrice = async () => {
-    const addresses =
-      network !== "invalid" ? ADDRESSES[network] : ADDRESSES.testnet;
-    return getPrice(web3, addresses.lemonToken, addresses);
+    const addresses = network !== "invalid" ? ADDRESSES[network] : ADDRESSES.testnet;
+    return getPrice(web3, addresses.limeToken, addresses);
   };
 
   const _updatePrice = async () => {

@@ -8,7 +8,7 @@ import { ADDRESSES, DEFAULT_NET } from "../constants";
 
 interface useContractsReturnValue {
   tokenFarm: Contract;
-  lemonToken: Contract;
+  limeToken: Contract;
   getBep20: (address: string) => Contract;
 }
 export const useContracts = (): useContractsReturnValue => {
@@ -21,7 +21,7 @@ export const useContracts = (): useContractsReturnValue => {
   };
 
   return {
-    lemonToken: new web3.eth.Contract(TokenAbi as AbiItem[], ADDRESSES[net].lemonToken),
+    limeToken: new web3.eth.Contract(TokenAbi as AbiItem[], ADDRESSES[net].limeToken),
     tokenFarm: new web3.eth.Contract(FarmAbi as AbiItem[], ADDRESSES[net].tokenFarm),
     getBep20,
   };

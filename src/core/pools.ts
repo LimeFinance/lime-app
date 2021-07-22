@@ -9,20 +9,20 @@ const pools: IPoolMeta[] = [
     name: "BUSD/LIME LP",
     image: BusdLemon,
     isFeatured: true,
-    tokenAddress: "0xCBBFd09FC03F34495D00c79c206B38ea82D08757",
+    tokenAddress: "0x72e5C6DfBef1E481E6FC11d14A4D743dAeB0A294",
   },
   {
     name: "BNB/LIME LP",
     image: BnbLemon,
     isFeatured: true,
-    tokenAddress: "0x5312a579eE43c8074a0Ea81b56BF4d47843D8eDD",
+    tokenAddress: "0xf593C3336A5bf3D01464B79c932F0E127b6E395d",
     homepage: true,
   },
   {
     name: "USDT/LIME LP",
     image: UsdtLemon,
     isFeatured: false,
-    tokenAddress: "0x162d343f7C008e85ABdA134Ac9817e9b22058374",
+    tokenAddress: "0x25426a3F652ef782de76CF89A82D7F6F6926BAB3",
     homepage: true,
   },
   {

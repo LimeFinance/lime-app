@@ -37,7 +37,7 @@ import { useHistory } from "react-router-dom";
 const Home = () => {
   const history = useHistory();
   const [{ address, network }] = useContext(ConnectionContext);
-  const { tokenFarm, lemonToken, getBep20 } = useContracts();
+  const { tokenFarm, limeToken, getBep20 } = useContracts();
   const [lemonPrice] = useContext(PriceContext);
 
   const [tvl, setTvl] = useState<undefined | BN>();
@@ -102,7 +102,7 @@ const Home = () => {
 
   const _fetchBalances = async () => {
     if (!lemonPrice || !harvestAmount || !address!.length) return;
-    const _balance = new BN(await lemonToken.methods.balanceOf(address).call());
+    const _balance = new BN(await limeToken.methods.balanceOf(address).call());
     setBalance(_balance);
     const lemonPriceNumber = Number(fromWei(lemonPrice));
     const totalLemons = _balance.add(harvestAmount);
