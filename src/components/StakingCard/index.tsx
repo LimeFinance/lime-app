@@ -11,7 +11,15 @@ import {
   PoolWrapper,
 } from "./styles";
 import pools from "../../core/pools";
-import { fromWei, tokens, roundString, getApr, getPoolSizeBusd } from "../../core/utils";
+import {
+  fromWei,
+  tokens,
+  roundString,
+  getApr,
+  getPoolSizeBusd,
+  requestUpdate,
+  addCommasToNumber,
+} from "../../core/utils";
 import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleDown } from "@fortawesome/free-solid-svg-icons";
@@ -26,8 +34,6 @@ import { ConnectionContext } from "../../core/context/connectionContext";
 import { useEffect } from "react";
 import CardSlide from "./CardSlide";
 import Skeleton from "react-loading-skeleton";
-import Web3 from "web3";
-import { ADDRESSES, DEFAULT_NET, PROVIDER_URL } from "../../core/constants";
 
 interface StakingCardProps {
   pool: IPool;
@@ -59,6 +65,7 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
       await bep20.methods.approve(tokenFarm.options.address, amount).send({ from: address });
       await tokenFarm.methods.depositTokens(amount, poolIndex).send({ from: address });
       await getBalance();
+      await requestUpdate(poolIndex);
       pushAlert({ type: "success", message: "Deposit completed successfully" });
     } catch (e) {
       console.error(e);
@@ -88,8 +95,6 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
 
   const limePerBlock = new BN(pool.limePerBlock);
   const poolSize = new BN(pool.poolSize !== "0" ? pool.poolSize : new BN(tokens("1")));
-  // const lemonPriceNormal = lemonPrice ? lemonPrice : new BN(tokens("1"));
-
   const Image = pools[poolIndex].image;
 
   return (
@@ -106,7 +111,8 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
         <h4>{pools[poolIndex].name}</h4>
         <h5>
           {lemonPrice ? (
-            roundString(fromWei(getApr(limePerBlock, lemonPrice, poolSize)), 2) + "% APR"
+            addCommasToNumber(roundString(fromWei(getApr(limePerBlock, lemonPrice, poolSize)), 2)) +
+            "% APR"
           ) : (
             <Skeleton />
           )}

@@ -23,7 +23,6 @@ const PriceUpdater = () => {
       const price = await _fetchPrice();
       setPrice(price);
     } catch (e) {
-      console.log("It errored out");
       console.error(e);
     }
   };

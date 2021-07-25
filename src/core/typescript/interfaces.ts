@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import BN from "bn.js";
 
 export interface IPool {
   limePerBlock: string;
@@ -11,8 +12,10 @@ export interface IPoolMeta {
   name: string;
   image: any;
   isFeatured: boolean;
+  isLp: boolean;
   tokenAddress: string;
   homepage?: boolean;
+  poolSizeBusd?: BN;
 }
 export interface IPoolWithMeta extends IPool, IPoolMeta {}
 

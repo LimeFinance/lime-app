@@ -5,7 +5,14 @@ import { useContracts } from "../../core/hooks/useContracts";
 import { CardSlideContainer, InputGroup, SameLineFlex } from "./styles";
 import BN from "bn.js";
 import { AlertContext } from "../../core/context/alertContext";
-import { fromWei, tokens, roundString, getPoolSizeBusd, addCommasToNumber } from "../../core/utils";
+import {
+  fromWei,
+  tokens,
+  roundString,
+  getPoolSizeBusd,
+  addCommasToNumber,
+  requestUpdate,
+} from "../../core/utils";
 import Button from "../Button";
 import Input from "../Input";
 import { useInterval } from "../../core/hooks/useInterval";
@@ -65,6 +72,7 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
       await tokenFarm.methods
         .withdrawTokens(tokens(amountToWithdraw), pool.index)
         .send({ from: address });
+      await requestUpdate(pool.index);
       pushAlert({ type: "success", message: "Withdrawal completed" });
     } catch (e) {
       console.error(e);
@@ -98,13 +106,14 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
     }
     setLoading(false);
   };
+
   const getPoolSize = async () => {
     const res = await getPoolSizeBusd(
       new Web3(PROVIDER_URL),
       { ...pool, ...pools[pool.index] },
       ADDRESSES[DEFAULT_NET]
     );
-    setPoolSizeBusd(res.div(ONE_ETHER));
+    setPoolSizeBusd(res);
   };
 
   useEffect(() => {

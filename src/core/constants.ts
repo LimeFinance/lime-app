@@ -1,5 +1,6 @@
 import BN from "bn.js";
-export const PROVIDER_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/"; // testnet for now
+export const PROVIDER_URL =
+  "https://bsc.getblock.io/testnet/?api_key=1c20dd60-abf3-4aa1-8b66-fa6e370fea30"; //"https://data-seed-prebsc-1-s1.binance.org:8545/"; // testnet for now
 export const DEFAULT_NET = "testnet";
 export const DAY_SECONDS = 86400;
 export const ONE_ETHER = new BN("1000000000000000000");
