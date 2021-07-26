@@ -40,7 +40,7 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
 
       <MenuLinkList>
         <MenuItem>
-          <NavLink to={"/"} activeClassName="active" exact={true}>
+          <NavLink to={"/"} activeClassName="active" exact={true} onClick={onDismiss}>
             <span>
               <FontAwesomeIcon icon={faHome} size={"lg"} />
             </span>
@@ -48,7 +48,7 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
           </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to={"/pools/"} activeClassName="active">
+          <NavLink to={"/pools/"} activeClassName="active" onClick={onDismiss}>
             <span>
               <FontAwesomeIcon icon={faDonate} size={"lg"} />
             </span>
@@ -56,7 +56,7 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
           </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to={"/farm/"} activeClassName="active">
+          <NavLink to={"/farm/"} activeClassName="active" onClick={onDismiss}>
             <span>
               <FontAwesomeIcon icon={faTractor} size={"lg"} />
             </span>
@@ -64,7 +64,7 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
           </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to={"/audits/"} activeClassName="active">
+          <NavLink to={"/audits/"} activeClassName="active" onClick={onDismiss}>
             <span>
               <FontAwesomeIcon icon={faShieldAlt} size={"lg"} />
             </span>
@@ -72,7 +72,7 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
           </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to={"/guide/"} activeClassName="active">
+          <NavLink to={"/guide/"} activeClassName="active" onClick={onDismiss}>
             <span>
               <FontAwesomeIcon icon={faBook} size={"lg"} />
             </span>
