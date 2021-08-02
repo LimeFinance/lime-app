@@ -27,10 +27,10 @@ const Alert: FC<AlertProps> = ({ onDismiss, message, type }) => {
           <FontAwesomeIcon icon={faCheckCircle} size={"2x"} color={lightMode.colors.success} />
         )}
         {type === "error" && (
-          <FontAwesomeIcon icon={faTimesCircle} size={"2x"} color={theme.colors.error} />
+          <FontAwesomeIcon icon={faTimesCircle} size={"2x"} color={lightMode.colors.error} />
         )}
         {type === "info" && (
-          <FontAwesomeIcon icon={faInfoCircle} size={"2x"} color={theme.colors.info} />
+          <FontAwesomeIcon icon={faInfoCircle} size={"2x"} color={lightMode.colors.info} />
         )}
       </Flex>
       <h5>{message}</h5>
