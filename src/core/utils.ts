@@ -3,7 +3,7 @@ import BN from "bn.js";
 import PancakeRouter from "../assets/contracts/PancakeRouter.json";
 import { AbiItem } from "web3-utils";
 import { ADDRESSES, ONE_ETHER } from "./constants";
-import { IPool, IPoolWithMeta } from "./typescript/interfaces";
+import { IPoolWithMeta } from "./typescript/interfaces";
 import IPancakePair from "@pancakeswap-libs/pancake-swap-core/build/IPancakePair.json";
 
 export const sqrt = (a: BN): BN => {
@@ -60,7 +60,6 @@ export const getPoolSizeBusd = async (
   pool: IPoolWithMeta,
   addresses: typeof ADDRESSES["testnet"]
 ): Promise<BN> => {
-  console.log("POOL", pool);
   const poolSize = new BN(pool.poolSize);
   if (pool.name.includes("LP")) {
     const lpToken = new web3.eth.Contract(IPancakePair.abi as AbiItem[], pool.token);
@@ -81,7 +80,6 @@ export const getPoolSizeBusd = async (
   } else {
     const tokenPrice = new BN(await getPrice(web3, pool.token, addresses));
 
-    console.log("TOKEN PRICE:", tokenPrice.toString(), poolSize.toString());
     return poolSize.mul(tokenPrice.div(ONE_ETHER));
   }
 };

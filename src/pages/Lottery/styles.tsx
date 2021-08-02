@@ -140,6 +140,12 @@ export const HeroText = styled.section`
     font-size: 1.55rem;
     margin-top: 0;
     margin-bottom: 0.85rem;
+    svg {
+      width: 1.75rem;
+      margin-left: 0.5rem;
+      position: relative;
+      top: 0.1rem;
+    }
     > span {
       display: inline-block;
       margin-right: 0.35em;
@@ -248,6 +254,7 @@ export const SameLine = styled.div`
 `;
 
 export const TicketWrapper = styled.div`
+  margin-top: 1.75rem;
   position: relative;
   max-width: 300px;
 `;
@@ -261,6 +268,7 @@ export const TicketContent = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 60%;
+  font-family: 'Avenir-regular';
 
   > svg {
     cursor: pointer;
@@ -282,7 +290,7 @@ export const TicketContent = styled.div`
 export const CountIndicator = styled.span`
   font-family: "Avenir-regular";
   position: absolute;
-  bottom: 0.85rem;
+  bottom: 2.15rem;
   left: 50%;
   transform: translateX(-50%);
 `;

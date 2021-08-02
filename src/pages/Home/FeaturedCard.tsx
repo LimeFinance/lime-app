@@ -2,7 +2,7 @@ import React from "react";
 import { FC } from "react";
 import Skeleton from "react-loading-skeleton";
 import Button from "../../components/Button";
-import { roundString, fromWei } from "../../core/utils";
+import { roundString, addCommasToNumber } from "../../core/utils";
 import { FeaturedPool, Placeholder } from "./styles";
 import BN from "bn.js";
 import { useHistory } from "react-router-dom";
@@ -30,7 +30,7 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ loading, pool }) => {
           {getImage(pools[pool.id].image)}
           <span>Featured {!p.isLp ? "pool" : "farm"}</span>
           <h4>{p.name}</h4>
-          <h5>{p.apr && roundString(p.apr, 2)}% APR</h5>
+          <h5>{p.apr && addCommasToNumber(roundString(p.apr, 2))}% APR</h5>
           <Button fullWidth={true} onClick={handleClick}>
             Stake
           </Button>

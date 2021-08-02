@@ -17,11 +17,12 @@ import Button from "../Button";
 import Input from "../Input";
 import { useInterval } from "../../core/hooks/useInterval";
 import { HarvestingContext } from "../../core/context/harvestingContext";
-import { ADDRESSES, DAY_SECONDS, DEFAULT_NET, ONE_ETHER, PROVIDER_URL } from "../../core/constants";
+import { ADDRESSES, DAY_SECONDS, DEFAULT_NET, PROVIDER_URL } from "../../core/constants";
 import Skeleton from "react-loading-skeleton";
 import Web3 from "web3";
 import pools from "../../core/pools";
 import { IPool } from "../../core/typescript/interfaces";
+import { useStateSafe } from "../../core/hooks/useStateSafe";
 
 interface CardSlideProps {
   show: boolean;
@@ -30,15 +31,15 @@ interface CardSlideProps {
 }
 
 const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
-  const [userStake, setUserStake] = useState<null | string>(null);
-  const [userLemons, setUserLemons] = useState<null | string>(null);
-  const [poolSizeBusd, setPoolSizeBusd] = useState<undefined | BN>();
-  const [amountToWithdraw, setAmountToWithdraw] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [userStake, setUserStake] = useStateSafe<null | string>(null);
+  const [userLemons, setUserLemons] = useStateSafe<null | string>(null);
+  const [poolSizeBusd, setPoolSizeBusd] = useStateSafe<undefined | BN>();
+  const [amountToWithdraw, setAmountToWithdraw] = useStateSafe<string>("");
+  const [loading, setLoading] = useStateSafe<boolean>(false);
 
   const { status, nextHarvestingDate } = useContext(HarvestingContext);
   const [, pushAlert] = useContext(AlertContext);
-  const [{ web3, address }] = useContext(ConnectionContext);
+  const [{ address }] = useContext(ConnectionContext);
   const { tokenFarm } = useContracts();
 
   const _fetchData = async () => {
@@ -96,7 +97,6 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
   const _setCheckpoint = async () => {
     setLoading(true);
     try {
-      console.log(tokenFarm.methods);
       await tokenFarm.methods.checkpoint(pool.index).send({ from: address });
 
       pushAlert({ type: "success", message: "Checkpoint set successfully" });

@@ -22,13 +22,13 @@ const TicketSlider: FC<{ numbers: number[] }> = ({ numbers }) => {
         {index - 1 >= 0 ? (
           <FontAwesomeIcon icon={faArrowLeft} onClick={reduceIndex} />
         ) : (
-          <span></span>
+          <span />
         )}
         <h2>{numbers[index]}</h2>
         {index + 1 < numbers.length ? (
           <FontAwesomeIcon icon={faArrowRight} onClick={addIndex} />
         ) : (
-          <span></span>
+          <span />
         )}
       </TicketContent>
       <CountIndicator>

@@ -29,7 +29,9 @@ const Pools = () => {
   }, [searchInput, setSearchInput]);
 
   useEffect(() => {
+    let mounted = true;
     const getPools = async () => {
+      if (!mounted) return;
       setLoading(true);
       const _pools: IPool[] = await tokenFarm.methods.getPools().call();
 
@@ -39,7 +41,6 @@ const Pools = () => {
         })
         .filter((pool) => !pool.name.includes("LP"));
 
-      console.log(allPools);
       const options = {
         keys: ["name"],
       };
@@ -50,6 +51,9 @@ const Pools = () => {
       setLoading(false);
     };
     getPools();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

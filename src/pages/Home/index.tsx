@@ -8,6 +8,7 @@ import {
   UserInfoCard,
   StatsContainer,
   Stat,
+  Ad,
 } from "./styles";
 import BN from "bn.js";
 import { ConnectionContext } from "../../core/context/connectionContext";
@@ -26,6 +27,7 @@ const Home = () => {
     firebase
       .firestore()
       .collection("networks")
+      // @ts-ignore
       .doc(DEFAULT_NET !== "mainnet" ? "testnet" : "mainnet")
       .collection("stats")
       .doc("main")
@@ -34,6 +36,7 @@ const Home = () => {
     firebase
       .firestore()
       .collection("networks")
+      // @ts-ignore
       .doc(DEFAULT_NET !== "mainnet" ? "testnet" : "mainnet")
       .collection("pools")
   );
@@ -79,7 +82,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!loadingPools && !poolsError && poolCollection) fetchEverything();
+    let mounted = true;
+    if (!loadingPools && !poolsError && poolCollection && mounted) fetchEverything();
+    return () => {
+      mounted = false;
+    };
   }, [address, lemonPrice, poolCollection]);
 
   return (
@@ -98,7 +105,7 @@ const Home = () => {
                 <Skeleton />
               )}
             </h2>
-            <span>Estimated invested balance</span>
+            <span>worth of LIME</span>
           </Stat>
           <Stat>
             <h4>{harvestAmount ? roundString(fromWei(harvestAmount), 2) : <Skeleton />}</h4>
@@ -132,6 +139,7 @@ const Home = () => {
             </Stat>
           </StatsContainer>
         </UserInfoCard>
+        {/* <Ad></Ad> */}
         <FeaturedCard
           pool={featuredPools && featuredPools[0]}
           loading={!(featuredPools && lemonPrice)}

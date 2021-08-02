@@ -23,9 +23,18 @@ export const useContracts = (): useContractsReturnValue => {
   };
 
   return {
-    limeToken: new web3.eth.Contract(TokenAbi as AbiItem[], ADDRESSES[net].limeToken),
-    tokenFarm: new web3.eth.Contract(FarmAbi as AbiItem[], ADDRESSES[net].tokenFarm),
-    lottery: new web3.eth.Contract(LotteryAbi as AbiItem[], ADDRESSES[net].lottery),
+    limeToken: new web3.eth.Contract(
+      TokenAbi as AbiItem[],
+      ADDRESSES[net].limeToken
+    ),
+    tokenFarm: new web3.eth.Contract(
+      FarmAbi as AbiItem[],
+      ADDRESSES[net].tokenFarm
+    ),
+    lottery: new web3.eth.Contract(
+      LotteryAbi as AbiItem[],
+      ADDRESSES[net].lottery
+    ),
     getBep20,
   };
 };

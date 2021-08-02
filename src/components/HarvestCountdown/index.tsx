@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { DAY_SECONDS } from "../../core/constants";
 import { HarvestingContext } from "../../core/context/harvestingContext";
@@ -7,7 +7,6 @@ import { ICountdown } from "../../core/typescript/interfaces";
 import { CountdownCard, TimeUnit } from "./styles";
 import Skeleton from "react-loading-skeleton";
 import Flex from "../Flex";
-import { Placeholder } from "../../pages/Pools/styles1";
 
 const HarvestCountdown = () => {
   const { status, nextHarvestingDate } = useContext(HarvestingContext);
@@ -34,9 +33,8 @@ const HarvestCountdown = () => {
     }
     return null;
   };
-  const [timeUntilHarvesting, setTimeUntilHarvesting] = useState<null | ICountdown>(
-    calculateTimeLeft()
-  );
+  const [timeUntilHarvesting, setTimeUntilHarvesting] =
+    useState<null | ICountdown>(calculateTimeLeft());
 
   useInterval(() => setTimeUntilHarvesting(calculateTimeLeft), 1000);
 

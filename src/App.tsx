@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./core/style/theme";
+import { lightMode, darkMode } from "./core/style/theme";
 import GlobalStyle from "./core/style/globalStyle";
 import Home from "./pages/Home";
 import Guide from "./pages/Guide";
@@ -21,6 +21,7 @@ import BN from "bn.js";
 import { HarvestingContext } from "./core/context/harvestingContext";
 import Audits from "./pages/Audits";
 import Lottery from "./pages/Lottery";
+import { ThemeSetterContext } from "./core/context/themeSetterContext";
 
 const App = () => {
   const [web3, setWeb3] = useState<IConnectionInfo>({
@@ -30,6 +31,7 @@ const App = () => {
   });
   const [alert, pushAlert] = useState<IAlert | null>(null);
   const [price, setPrice] = useState<BN | null>(null);
+  const [theme, setTheme] = useState<typeof lightMode | typeof darkMode>(lightMode);
   const [harvestingContext, setHarvestingContext] = useState<IHarvestingContext>({
     status: "loading",
     nextHarvestingDate: null,
@@ -60,45 +62,55 @@ const App = () => {
     getNextHarvestingDate();
   }, []);
 
+  const toggleTheme = () => {
+    if (theme === lightMode) {
+      setTheme(darkMode);
+    } else {
+      setTheme(lightMode);
+    }
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-      <ConnectionContext.Provider value={[web3, setWeb3]}>
-        <AlertContext.Provider value={[alert, pushAlert]}>
-          <PriceContext.Provider value={[price, setPrice]}>
-            <HarvestingContext.Provider value={harvestingContext}>
-              <PriceUpdater />
-              <Router>
-                <GlobalStyle />
-                <Navbar />
-                {alert && <Alert message={alert.message} type={alert.type} />}
-                <Container>
-                  <Switch>
-                    <Route path={"/"} exact={true}>
-                      <Home />
-                    </Route>
-                    <Route path={"/guide/"} exact={true}>
-                      <Guide />
-                    </Route>
-                    <Route path={"/pools/"} exact={true}>
-                      <Pools />
-                    </Route>
-                    <Route path={"/farm/"} exact={true}>
-                      <Farm />
-                    </Route>
-                    <Route path={"/audits/"} exact={true}>
-                      <Audits />
-                    </Route>
-                    <Route path={"/lottery/"} exact={true}>
-                      <Lottery />
-                    </Route>
-                  </Switch>
-                </Container>
-              </Router>
-            </HarvestingContext.Provider>
-          </PriceContext.Provider>
-        </AlertContext.Provider>
-      </ConnectionContext.Provider>
-    </ThemeProvider>
+    <ThemeSetterContext.Provider value={toggleTheme}>
+      <ThemeProvider theme={theme}>
+        <ConnectionContext.Provider value={[web3, setWeb3]}>
+          <AlertContext.Provider value={[alert, pushAlert]}>
+            <PriceContext.Provider value={[price, setPrice]}>
+              <HarvestingContext.Provider value={harvestingContext}>
+                <PriceUpdater />
+                <Router>
+                  <GlobalStyle />
+                  <Navbar />
+                  {alert && <Alert message={alert.message} type={alert.type} />}
+                  <Container>
+                    <Switch>
+                      <Route path={"/"} exact={true}>
+                        <Home />
+                      </Route>
+                      <Route path={"/guide/"} exact={true}>
+                        <Guide />
+                      </Route>
+                      <Route path={"/pools/"} exact={true}>
+                        <Pools />
+                      </Route>
+                      <Route path={"/farm/"} exact={true}>
+                        <Farm />
+                      </Route>
+                      <Route path={"/audits/"} exact={true}>
+                        <Audits />
+                      </Route>
+                      <Route path={"/lottery/"} exact={true}>
+                        <Lottery />
+                      </Route>
+                    </Switch>
+                  </Container>
+                </Router>
+              </HarvestingContext.Provider>
+            </PriceContext.Provider>
+          </AlertContext.Provider>
+        </ConnectionContext.Provider>
+      </ThemeProvider>
+    </ThemeSetterContext.Provider>
   );
 };
 

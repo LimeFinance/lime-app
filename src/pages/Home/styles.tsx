@@ -14,6 +14,7 @@ export const MainGrid = styled.section`
   grid-template-rows: repeat(8, 1fr);
 
   ${breakpoint("tablet")`
+  grid-template-columns: repeat(12, minmax(40px, 1fr));
     grid-template-rows: repeat(7, 1fr);
   `}
 
@@ -75,6 +76,11 @@ export const FeaturedPool = styled(Card)`
     grid-column: span 12;
   }
 
+  svg {
+    max-height: 77.5px;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
   span {
     font-family: "Avenir-regular";
   }
@@ -89,4 +95,9 @@ export const StatsContainer = styled.div``;
 export const Placeholder = styled.div`
   height: 30%;
   width: 100%;
+`;
+
+export const Ad = styled.section`
+  grid-row: span 4;
+  grid-column: span 6;
 `;

@@ -1,6 +1,6 @@
 import { DefaultTheme } from "styled-components";
 
-export const theme: DefaultTheme = {
+export const lightMode: DefaultTheme = {
   colors: {
     primary: "#79FF4A",
     toned: "#03EA36",
@@ -22,4 +22,17 @@ export const theme: DefaultTheme = {
   //   xl: 1200,
   //   xxl: 1800,
   // },
+};
+export const darkMode: DefaultTheme = {
+  primary: "#",
+  toned: "#",
+  text: "#",
+  secondaryText: "#",
+  disabled: "#",
+  background: "#",
+  light: "#",
+  secondaryBackground: "#",
+  success: "#",
+  error: "#",
+  info: "#",
 };

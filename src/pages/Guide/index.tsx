@@ -1,9 +1,7 @@
 import React from "react";
-import Container from "../../components/Container";
-import Scrollspy from "react-scrollspy";
 import Title from "../../components/Title";
 import Subtitle from "../../components/Subtitle";
-import { GuideContainer, Navigation, GuideContent } from "./styles";
+import { GuideContainer } from "./styles";
 
 const Guide = () => {
   return (
@@ -11,7 +9,9 @@ const Guide = () => {
       <Title>
         Coming <span>soon</span>
       </Title>
-      <Subtitle>The guide and other features will be available in upcoming phases!</Subtitle>
+      <Subtitle>
+        The guide and other features will be available in upcoming phases!
+      </Subtitle>
       <GuideContainer>
         {/* <Navigation>
           <Scrollspy items={["section-1", "section-2", "section-3"]} currentClassName="active">

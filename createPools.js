@@ -31,7 +31,7 @@ poolsRef.doc("0").set({
   poolSize: "0",
   poolSizeBusd: 0,
   taxFree: true,
-  token: "",
+  token: "0x099C3e2d52C8d078f1026F3f21a5C7558456e78a",
 });
 
 poolsRef.doc("1").set({
@@ -44,7 +44,7 @@ poolsRef.doc("1").set({
   poolSize: "0",
   poolSizeBusd: 0,
   taxFree: true,
-  token: "",
+  token: "0x6c17b0F7d06EcFC62768C53E6a41f7151572A563",
 });
 
 poolsRef.doc("2").set({
@@ -84,20 +84,8 @@ poolsRef.doc("4").set({
   taxFree: true,
   token: "",
 });
-poolsRef.doc("5").set({
-  apr: "",
-  homepage: true,
-  isFeatured: true,
-  isLp: false,
-  limePerBlock: web3.utils.toWei("15"),
-  name: "BUSD",
-  poolSize: "0",
-  poolSizeBusd: 0,
-  taxFree: false,
-  token: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
-});
 
-poolsRef.doc("6").set({
+poolsRef.doc("5").set({
   apr: "",
   homepage: false,
   isFeatured: true,
@@ -108,6 +96,18 @@ poolsRef.doc("6").set({
   poolSizeBusd: 0,
   taxFree: false,
   token: "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+});
+poolsRef.doc("6").set({
+  apr: "",
+  homepage: true,
+  isFeatured: true,
+  isLp: false,
+  limePerBlock: web3.utils.toWei("15"),
+  name: "BUSD",
+  poolSize: "0",
+  poolSizeBusd: 0,
+  taxFree: false,
+  token: "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
 });
 
 poolsRef.doc("7").set({

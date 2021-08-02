@@ -9,6 +9,7 @@ import BN from "bn.js";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import { ADDRESSES, ONE_ETHER } from "../../core/constants";
 import { AlertContext } from "../../core/context/alertContext";
+import { useStateSafe } from "../../core/hooks/useStateSafe";
 
 interface BuyPopupProps {
   show: boolean;
@@ -20,13 +21,13 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
   const [{ address, network }] = useContext(ConnectionContext);
   const [, pushAlert] = useContext(AlertContext);
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [ticketPrice, setTicketPrice] = useState<undefined | number>();
-  const [ticketPriceBN, setTicketPriceBN] = useState<undefined | BN>();
-  const [userLimeBalance, setUserLimeBalance] = useState<BN>(new BN("0"));
-  const [loading, setLoading] = useState<undefined | boolean>();
-  const [generating, setGenerating] = useState<undefined | boolean>();
-  const [approving, setApproving] = useState<undefined | boolean>();
+  const [showPopup, setShowPopup] = useStateSafe(false);
+  const [ticketPrice, setTicketPrice] = useStateSafe<undefined | number>();
+  const [ticketPriceBN, setTicketPriceBN] = useStateSafe<undefined | BN>();
+  const [userLimeBalance, setUserLimeBalance] = useStateSafe<BN>(new BN("0"));
+  const [loading, setLoading] = useStateSafe<undefined | boolean>();
+  const [generating, setGenerating] = useStateSafe<undefined | boolean>();
+  const [approving, setApproving] = useStateSafe<undefined | boolean>();
   const [amountToBuy, setAmountToBuy] = useState<undefined | number>();
   const { lottery, limeToken } = useContracts();
 
@@ -45,7 +46,6 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
     try {
       setApproving(true);
       const tot = ticketPriceBN.mul(new BN(amountToBuy));
-      console.log(fromWei(tot));
       await limeToken.methods.approve(ADDRESSES[network].lottery, tot).send({ from: address });
 
       setApproving(false);
@@ -72,13 +72,12 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
     setGenerating(true);
     const res = [];
     while (res.length <= amount) {
-      let randomNum = Math.floor(Math.random() * 100000);
+      const randomNum = Math.floor(Math.random() * 100000);
       if (!(await lottery.methods.isNumberUsed(randomNum).call()) && !res.includes(randomNum)) {
         res.push(randomNum);
       }
     }
     setGenerating(false);
-    console.log(res);
     return res;
   };
 
@@ -142,7 +141,7 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
         <NormalText>Total:</NormalText>
         <NormalText>{amountToBuy ? ticketPrice * amountToBuy : 0} LIME</NormalText>
       </SameLine>
-      <Button fullWidth disabled={!getButtonStatus().enabled} onClick={buyTickets}>
+      <Button fullWidth={true} disabled={!getButtonStatus().enabled} onClick={buyTickets}>
         {getButtonStatus().text}
       </Button>
       <NormalText>Note: This will burn $LIME and automatically pick random numbers</NormalText>

@@ -17,13 +17,13 @@ import { faUserFriends, faClock, faTicketAlt } from "@fortawesome/free-solid-svg
 import BuyPopup from "./BuyPopup";
 import { useContracts } from "../../core/hooks/useContracts";
 import Skeleton from "react-loading-skeleton";
-import { fromWei, trimAddress } from "../../core/utils";
+import { addCommasToNumber, fromWei, roundString, trimAddress } from "../../core/utils";
 import Web3 from "web3";
-import { ADDRESSES, PROVIDER_URL } from "../../core/constants";
+import { PROVIDER_URL } from "../../core/constants";
 import { useInterval } from "../../core/hooks/useInterval";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import TicketSlider from "./TicketSlider";
-const web3 = new Web3(PROVIDER_URL);
+import { ReactComponent as Bnb } from "../../assets/images/BNB-coin.svg";
 
 const Lottery = () => {
   const { lottery } = useContracts();
@@ -52,7 +52,6 @@ const Lottery = () => {
   };
 
   const toggleOverlay = () => {
-    console.log("toggle");
     setShowPopup(!showPopup);
   };
 
@@ -78,17 +77,25 @@ const Lottery = () => {
                 <span> LIME </span>
                 lottery!
               </h1>
-              <h5>Your tickets:</h5>
               <TicketSlider numbers={userNumbers} />
               <h5>Current pot:</h5>
-              <h3>{typeof pot !== "undefined" ? pot + "BNB" : <Skeleton />}</h3>
+              <h3>
+                {typeof pot !== "undefined" ? (
+                  <>
+                    {roundString(pot, 4)}
+                    <Bnb />
+                  </>
+                ) : (
+                  <Skeleton />
+                )}
+              </h3>
             </>
           ) : (
             <>
               <h1>
                 {lotteryState === "0" && (
                   <>
-                    Burn your <br></br>
+                    Burn your <br />
                     <span> LIME </span>
                     and <br />
                     take the prize!
@@ -120,7 +127,10 @@ const Lottery = () => {
                     <Skeleton />
                   )
                 ) : typeof pot !== "undefined" ? (
-                  pot + "BNB"
+                  <>
+                    {roundString(pot, 4)}
+                    <Bnb />
+                  </>
                 ) : (
                   <Skeleton />
                 )}

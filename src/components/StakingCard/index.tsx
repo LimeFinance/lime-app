@@ -16,7 +16,6 @@ import {
   tokens,
   roundString,
   getApr,
-  getPoolSizeBusd,
   requestUpdate,
   addCommasToNumber,
 } from "../../core/utils";
@@ -34,7 +33,7 @@ import { ConnectionContext } from "../../core/context/connectionContext";
 import { useEffect } from "react";
 import CardSlide from "./CardSlide";
 import Skeleton from "react-loading-skeleton";
-import firebase from "../../core/initFirebase";
+import { useStateSafe } from "../../core/hooks/useStateSafe";
 
 interface StakingCardProps {
   pool: IPool;
@@ -42,13 +41,13 @@ interface StakingCardProps {
 }
 
 const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
-  const [showCurrency, setShowCurrency] = useState(false);
-  const [stakeAmountInput, setStakeAmountInput] = useState<undefined | string>();
-  const [userTokenBalance, setUserTokenBalance] = useState<undefined | string>();
-  const [showCardSlide, setShowCardSlide] = useState(false);
+  const [showCurrency, setShowCurrency] = useStateSafe(false);
+  const [stakeAmountInput, setStakeAmountInput] = useStateSafe<undefined | string>();
+  const [userTokenBalance, setUserTokenBalance] = useStateSafe<undefined | string>();
+  const [showCardSlide, setShowCardSlide] = useStateSafe(false);
 
   const { getBep20, tokenFarm } = useContracts();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useStateSafe(false);
   const [{ network, address }] = useContext(ConnectionContext);
   const [, pushAlert] = useContext(AlertContext);
   const [lemonPrice] = useContext(PriceContext);
@@ -61,19 +60,10 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
     setLoading(true);
     if (!stakeAmountInput) return;
     try {
-      // const doc = await firebase
-      //   .firestore()
-      //   .collection("networks")
-      //   .doc(network !== "mainnet" ? "testnet" : "mainnet")
-      //   .collection("pools")
-      //   .doc(poolIndex.toString())
-      //   .get();
-
       const bep20 = getBep20(pool.token);
       const amount = tokens(stakeAmountInput);
       await bep20.methods.approve(tokenFarm.options.address, amount).send({ from: address });
       await tokenFarm.methods.depositTokens(amount, poolIndex).send({ from: address });
-      await getBalance();
       await requestUpdate(poolIndex);
       pushAlert({ type: "success", message: "Deposit completed successfully" });
     } catch (e) {
@@ -83,23 +73,28 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
 
     setLoading(false);
   };
-  const getBalance = async () => {
-    setLoading(true);
-    try {
-      const bep20 = getBep20(pool.token);
-      const balance = await bep20.methods.balanceOf(address).call();
-      setUserTokenBalance(balance);
-    } catch (e) {
-      console.error(e);
-      pushAlert({ type: "error", message: "Couldn't retrieve balance" });
-    }
-    setLoading(false);
-  };
 
   useEffect(() => {
+    let mounted = true;
+    const getBalance = async () => {
+      if (!mounted) return;
+      setLoading(true);
+      try {
+        const bep20 = getBep20(pool.token);
+        const balance = await bep20.methods.balanceOf(address).call();
+        setUserTokenBalance(balance);
+      } catch (e) {
+        console.error(e);
+        pushAlert({ type: "error", message: "Couldn't retrieve balance" });
+      }
+      setLoading(false);
+    };
     if (address) {
       getBalance();
     }
+    return () => {
+      mounted = false;
+    };
   }, [address]);
 
   const limePerBlock = new BN(pool.limePerBlock);

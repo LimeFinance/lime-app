@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import Card from "../Card";
 import Input from "../Input";
 
 export const CardContainer = styled.section<{

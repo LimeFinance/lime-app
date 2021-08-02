@@ -14,7 +14,6 @@ import {
   faTractor,
   faShieldAlt,
   faBook,
-  faTimes,
   faMoneyBill,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
@@ -36,12 +35,23 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
       <FontAwesomeIcon icon={faArrowLeft} onClick={onDismiss} size={"sm"} />
       <MenuPriceContainer>
         <Logo />
-        <h5>{lemonPrice ? "$" + roundString(fromWei(lemonPrice), 2) : <Skeleton />}</h5>
+        <h5>
+          {lemonPrice ? (
+            "$" + roundString(fromWei(lemonPrice), 2)
+          ) : (
+            <Skeleton />
+          )}
+        </h5>
       </MenuPriceContainer>
 
       <MenuLinkList>
         <MenuItem>
-          <NavLink to={"/"} activeClassName="active" exact={true} onClick={onDismiss}>
+          <NavLink
+            to={"/"}
+            activeClassName="active"
+            exact={true}
+            onClick={onDismiss}
+          >
             <span>
               <FontAwesomeIcon icon={faHome} size={"lg"} />
             </span>
@@ -65,7 +75,11 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
           </NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to={"/lottery/"} activeClassName="active" onClick={onDismiss}>
+          <NavLink
+            to={"/lottery/"}
+            activeClassName="active"
+            onClick={onDismiss}
+          >
             <span>
               <FontAwesomeIcon icon={faMoneyBill} size={"lg"} />
             </span>

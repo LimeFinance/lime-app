@@ -41,6 +41,15 @@ export const LinkList = styled.div`
     font-size: 1rem;
     text-decoration: none;
     color: ${(props) => props.theme.colors.text};
+    position: relative;
+
+    svg {
+      color: ${(props) => props.theme.colors.toned};
+      position: absolute;
+      // transform: rotate(15deg);
+      right: -16px;
+      top: -5px;
+    }
   }
 `;
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../components/Title";
-import Subtitle from "../../components/Subtitle";
 import { useContracts } from "../../core/hooks/useContracts";
 import { IPool } from "../../core/typescript/interfaces";
 import StakingCard from "../../components/StakingCard";
@@ -26,10 +25,12 @@ const Farm = () => {
       const result = fuse.search(searchInput);
       setPoolsSearched(result);
     }
-  }, [searchInput, setSearchInput]);
+  }, [searchInput, setSearchInput, fuse]);
 
   useEffect(() => {
+    let mounted = true;
     const getPools = async () => {
+      if (!mounted) return;
       const _pools: IPool[] = await tokenFarm.methods.getPools().call();
 
       const allPools = _pools
@@ -38,7 +39,6 @@ const Farm = () => {
         })
         .filter((pool) => (pool.name ? pool.name.includes("LP") : null));
 
-      console.log(allPools);
       const options = {
         keys: ["name"],
       };
@@ -49,7 +49,10 @@ const Farm = () => {
       setLoading(false);
     };
     getPools();
-  }, []);
+    return () => {
+      mounted = false;
+    };
+  }, [fuse, tokenFarm.methods]);
 
   return (
     <div style={{ minHeight: "130vh" }}>
