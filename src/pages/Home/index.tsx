@@ -90,7 +90,7 @@ const Home = () => {
   }, [address, lemonPrice, poolCollection]);
 
   return (
-    <>
+    <div style={{ minHeight: "130vh" }}>
       <TitleWithPadding>
         <span>Lime</span> finance
       </TitleWithPadding>
@@ -151,7 +151,7 @@ const Home = () => {
           lemonPrice={lemonPrice}
         />
       </MainGrid>
-    </>
+    </div>
   );
 };
 

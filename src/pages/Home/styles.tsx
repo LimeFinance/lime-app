@@ -79,8 +79,11 @@ export const FeaturedPool = styled(Card)`
   svg {
     max-height: 77.5px;
     display: block;
+    margin-right: auto;
+    text-align: left;
     margin-bottom: 0.5rem;
   }
+
   span {
     font-family: "Avenir-regular";
   }
