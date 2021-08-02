@@ -7,6 +7,7 @@ export const PoolContainer = styled.section`
   grid-template-rows: 90px auto;
   justify-content: center;
   gap: 1em;
+  row-gap: 2em;
   display: grid;
   flex-wrap: wrap;
   margin-top: 3em;

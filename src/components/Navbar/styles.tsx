@@ -9,7 +9,7 @@ export const DesktopNav = styled.div`
   ${breakpoint("desktop")`
     padding: 0 15%;
     display:flex;
-    padding: 0 10%;
+    // padding: 0 10%;
 	`}
   align-items: center;
   h5 {
@@ -24,7 +24,7 @@ export const Nav = styled.nav`
   background: #ffffff;
   box-shadow: 0px 6px 14px rgba(219, 219, 219, 0.25);
   padding: 0 7.5%;
-  margin-bottom: 2em;
+  // margin-bottom: 2em;
   ${breakpoint("desktop")`
     padding:0;
     height:83px;

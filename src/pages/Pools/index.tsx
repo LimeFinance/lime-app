@@ -53,7 +53,7 @@ const Pools = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ minHeight: "130vh" }}>
       <Title>
         Staking <span>pools</span>
       </Title>

@@ -96,6 +96,10 @@ export const getApr = (limePerBlock: BN, lemonPriceNormal: BN, poolSize: BN): BN
   return limePerBlock.mul(BLOCKS_IN_A_YEAR).mul(lemonPriceNormal).div(poolSize);
 };
 
+export const trimAddress = (address: string): string => {
+  return address.slice(0, 5) + "..." + address.slice(address.length - 6, address.length - 1);
+};
+
 export const requestUpdate = async (poolIndex: number) => {
   try {
     await fetch("https://us-central1-limefinance-ee38a.cloudfunctions.net/updatePoolAndStats", {

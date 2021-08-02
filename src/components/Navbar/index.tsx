@@ -185,6 +185,7 @@ const Navbar = () => {
             <Link to={"/"}>Home</Link>
             <Link to={"/pools/"}>Pools</Link>
             <Link to={"/farm/"}>Farm</Link>
+            <Link to={"/lottery/"}>Lottery</Link>
             <Link to={"/audits/"}>Audits</Link>
             <Link to={"/guide/"}>Guide</Link>
           </LinkList>

@@ -3,12 +3,14 @@ import { useContext } from "react";
 import { ConnectionContext } from "../context/connectionContext";
 import { abi as TokenAbi } from "../../assets/contracts/LimeToken.json";
 import { abi as FarmAbi } from "../../assets/contracts/TokenFarm.json";
+import { abi as LotteryAbi } from "../../assets/contracts/Lottery.json";
 import { AbiItem } from "web3-utils";
 import { ADDRESSES, DEFAULT_NET } from "../constants";
 
 interface useContractsReturnValue {
   tokenFarm: Contract;
   limeToken: Contract;
+  lottery: Contract;
   getBep20: (address: string) => Contract;
 }
 export const useContracts = (): useContractsReturnValue => {
@@ -23,6 +25,7 @@ export const useContracts = (): useContractsReturnValue => {
   return {
     limeToken: new web3.eth.Contract(TokenAbi as AbiItem[], ADDRESSES[net].limeToken),
     tokenFarm: new web3.eth.Contract(FarmAbi as AbiItem[], ADDRESSES[net].tokenFarm),
+    lottery: new web3.eth.Contract(LotteryAbi as AbiItem[], ADDRESSES[net].lottery),
     getBep20,
   };
 };

@@ -16,9 +16,7 @@ import Skeleton from "react-loading-skeleton";
 const Farm = () => {
   const [loading, setLoading] = useState(true);
   const [fuse, setFuse] = useState<undefined | Fuse<IPool>>();
-  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>(
-    []
-  );
+  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>([]);
   const [pools, setPools] = useState<IPool[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const { tokenFarm } = useContracts();
@@ -38,7 +36,7 @@ const Farm = () => {
         .map((pool, index) => {
           return { ...pool, ...poolMeta[index], index };
         })
-        .filter((pool) => pool.name.includes("LP"));
+        .filter((pool) => (pool.name ? pool.name.includes("LP") : null));
 
       console.log(allPools);
       const options = {
@@ -54,7 +52,7 @@ const Farm = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ minHeight: "130vh" }}>
       <Title>
         Staking <span>farms</span>
       </Title>
@@ -79,20 +77,10 @@ const Farm = () => {
         {!loading ? (
           searchInput || poolsSearched.length ? (
             poolsSearched.map(({ item: pool }) => (
-              <StakingCard
-                pool={pool}
-                poolIndex={pool.index}
-                key={pool.index}
-              />
+              <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />
             ))
           ) : (
-            pools.map((pool) => (
-              <StakingCard
-                pool={pool}
-                poolIndex={pool.index}
-                key={pool.index}
-              />
-            ))
+            pools.map((pool) => <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />)
           )
         ) : (
           <Skeletons />

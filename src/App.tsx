@@ -20,6 +20,7 @@ import { PriceContext } from "./core/context/priceContext";
 import BN from "bn.js";
 import { HarvestingContext } from "./core/context/harvestingContext";
 import Audits from "./pages/Audits";
+import Lottery from "./pages/Lottery";
 
 const App = () => {
   const [web3, setWeb3] = useState<IConnectionInfo>({
@@ -42,7 +43,7 @@ const App = () => {
 
     if (typeof timestamp === "string") return;
 
-    const r = timestamp % (DAY_SECONDS * 14);
+    const r = (timestamp + DAY_SECONDS * 2) % (DAY_SECONDS * 14);
     if (r < DAY_SECONDS) {
       setHarvestingContext({ status: "done", nextHarvestingDate: new Date() });
       return;
@@ -86,6 +87,9 @@ const App = () => {
                     </Route>
                     <Route path={"/audits/"} exact={true}>
                       <Audits />
+                    </Route>
+                    <Route path={"/lottery/"} exact={true}>
+                      <Lottery />
                     </Route>
                   </Switch>
                 </Container>

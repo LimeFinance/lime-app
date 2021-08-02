@@ -15,6 +15,7 @@ import {
   faShieldAlt,
   faBook,
   faTimes,
+  faMoneyBill,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faTelegram } from "@fortawesome/free-brands-svg-icons";
@@ -61,6 +62,14 @@ const SideMenu: FC<SideMenuProps> = ({ show, lemonPrice, onDismiss }) => {
               <FontAwesomeIcon icon={faTractor} size={"lg"} />
             </span>
             Farm
+          </NavLink>
+        </MenuItem>
+        <MenuItem>
+          <NavLink to={"/lottery/"} activeClassName="active" onClick={onDismiss}>
+            <span>
+              <FontAwesomeIcon icon={faMoneyBill} size={"lg"} />
+            </span>
+            Lottery
           </NavLink>
         </MenuItem>
         <MenuItem>

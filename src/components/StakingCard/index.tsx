@@ -34,6 +34,7 @@ import { ConnectionContext } from "../../core/context/connectionContext";
 import { useEffect } from "react";
 import CardSlide from "./CardSlide";
 import Skeleton from "react-loading-skeleton";
+import firebase from "../../core/initFirebase";
 
 interface StakingCardProps {
   pool: IPool;
@@ -60,7 +61,15 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
     setLoading(true);
     if (!stakeAmountInput) return;
     try {
-      const bep20 = getBep20(pools[poolIndex].tokenAddress);
+      // const doc = await firebase
+      //   .firestore()
+      //   .collection("networks")
+      //   .doc(network !== "mainnet" ? "testnet" : "mainnet")
+      //   .collection("pools")
+      //   .doc(poolIndex.toString())
+      //   .get();
+
+      const bep20 = getBep20(pool.token);
       const amount = tokens(stakeAmountInput);
       await bep20.methods.approve(tokenFarm.options.address, amount).send({ from: address });
       await tokenFarm.methods.depositTokens(amount, poolIndex).send({ from: address });
@@ -77,7 +86,7 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
   const getBalance = async () => {
     setLoading(true);
     try {
-      const bep20 = getBep20(pools[poolIndex].tokenAddress);
+      const bep20 = getBep20(pool.token);
       const balance = await bep20.methods.balanceOf(address).call();
       setUserTokenBalance(balance);
     } catch (e) {

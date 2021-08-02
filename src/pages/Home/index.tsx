@@ -20,14 +20,22 @@ import { PriceContext } from "../../core/context/priceContext";
 import FeaturedCard from "./FeaturedCard";
 import firebase from "../../core/initFirebase";
 import { DEFAULT_NET, ONE_ETHER } from "../../core/constants";
-import { DocumentData, QueryDocumentSnapshot, QuerySnapshot } from "@google-cloud/firestore";
 
 const Home = () => {
   const [stats, loadingStats, statsError] = useDocument(
-    firebase.firestore().collection("networks").doc(DEFAULT_NET).collection("stats").doc("main")
+    firebase
+      .firestore()
+      .collection("networks")
+      .doc(DEFAULT_NET !== "mainnet" ? "testnet" : "mainnet")
+      .collection("stats")
+      .doc("main")
   );
   const [poolCollection, loadingPools, poolsError] = useCollection(
-    firebase.firestore().collection("networks").doc(DEFAULT_NET).collection("pools")
+    firebase
+      .firestore()
+      .collection("networks")
+      .doc(DEFAULT_NET !== "mainnet" ? "testnet" : "mainnet")
+      .collection("pools")
   );
 
   const [{ address, network }] = useContext(ConnectionContext);

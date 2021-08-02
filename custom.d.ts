@@ -6,6 +6,11 @@ declare global {
   }
 }
 
+declare module "*.svg" {
+  const content: any;
+  export default content;
+}
+
 declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
