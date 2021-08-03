@@ -8,11 +8,15 @@ const TicketSlider: FC<{ numbers: number[] }> = ({ numbers }) => {
   const [index, setIndex] = useState(0);
 
   const addIndex = () => {
-    index + 1 < numbers.length && setIndex(index + 1);
+    if (index + 1 < numbers.length) {
+      setIndex(index + 1);
+    }
   };
 
   const reduceIndex = () => {
-    index - 1 >= 0 && setIndex(index - 1);
+    if (index - 1 >= 0) {
+      setIndex(index - 1);
+    }
   };
 
   return (

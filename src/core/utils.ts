@@ -46,7 +46,8 @@ export const getPrice = async (
     addresses.pancakeRouter
   );
 
-  if (tokenAddress.toLowerCase() === addresses.BUSD.toLowerCase()) return ONE_ETHER;
+  if (tokenAddress.toLowerCase() === addresses.BUSD.toLowerCase())
+    return ONE_ETHER;
 
   const amountsOut = await pancakeContract.methods
     .getAmountsOut(tokens("1"), [tokenAddress, addresses.BUSD])
@@ -62,7 +63,10 @@ export const getPoolSizeBusd = async (
 ): Promise<BN> => {
   const poolSize = new BN(pool.poolSize);
   if (pool.name.includes("LP")) {
-    const lpToken = new web3.eth.Contract(IPancakePair.abi as AbiItem[], pool.token);
+    const lpToken = new web3.eth.Contract(
+      IPancakePair.abi as AbiItem[],
+      pool.token
+    );
     const tokenA = await lpToken.methods.token0().call();
     const tokenB = await lpToken.methods.token1().call();
     const priceA = await getPrice(web3, tokenA, addresses);
@@ -70,7 +74,9 @@ export const getPoolSizeBusd = async (
     const totalReserves = await lpToken.methods.getReserves().call();
     const totalSupply = await lpToken.methods.totalSupply().call();
     const tokenPriceCumulative = sqrt(priceA.mul(priceB));
-    const tokenReserveCumulative = sqrt(new BN(totalReserves[0]).mul(new BN(totalReserves[1])));
+    const tokenReserveCumulative = sqrt(
+      new BN(totalReserves[0]).mul(new BN(totalReserves[1]))
+    );
     const lpTokenPrice = tokenReserveCumulative
       .mul(tokenPriceCumulative)
       .div(new BN(totalSupply))
@@ -88,26 +94,38 @@ export const addCommasToNumber = (num: string): string => {
   return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export const getApr = (limePerBlock: BN, lemonPriceNormal: BN, poolSize: BN): BN => {
+export const getApr = (
+  limePerBlock: BN,
+  lemonPriceNormal: BN,
+  poolSize: BN
+): BN => {
   const BLOCKS_IN_A_YEAR = new BN(10512000);
-  if (poolSize.eq(new BN(0))) return limePerBlock.mul(BLOCKS_IN_A_YEAR).mul(lemonPriceNormal);
+  if (poolSize.eq(new BN(0)))
+    return limePerBlock.mul(BLOCKS_IN_A_YEAR).mul(lemonPriceNormal);
   return limePerBlock.mul(BLOCKS_IN_A_YEAR).mul(lemonPriceNormal).div(poolSize);
 };
 
 export const trimAddress = (address: string): string => {
-  return address.slice(0, 5) + "..." + address.slice(address.length - 6, address.length - 1);
+  return (
+    address.slice(0, 5) +
+    "..." +
+    address.slice(address.length - 6, address.length - 1)
+  );
 };
 
 export const requestUpdate = async (poolIndex: number) => {
   try {
-    await fetch("https://us-central1-limefinance-ee38a.cloudfunctions.net/updatePoolAndStats", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ poolIndex: poolIndex.toString() }),
-    });
+    await fetch(
+      "https://us-central1-limefinance-ee38a.cloudfunctions.net/updatePoolAndStats",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ poolIndex: poolIndex.toString() }),
+      }
+    );
   } catch (e) {
     console.error(e);
   }

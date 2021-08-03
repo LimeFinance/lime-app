@@ -4,7 +4,6 @@ import { ThemeProvider } from "styled-components";
 import { lightMode, darkMode } from "./core/style/theme";
 import GlobalStyle from "./core/style/globalStyle";
 import Home from "./pages/Home";
-import Guide from "./pages/Guide";
 import Pools from "./pages/Pools";
 import Farm from "./pages/Farm";
 import Navbar from "./components/Navbar";
@@ -15,11 +14,14 @@ import { AlertContext } from "./core/context/alertContext";
 import Alert from "./components/Alert";
 import { PROVIDER_URL, DEFAULT_NET, DAY_SECONDS } from "./core/constants";
 import PriceUpdater from "./components/PriceUpdater";
-import { IConnectionInfo, IAlert, IHarvestingContext } from "./core/typescript/interfaces";
+import {
+  IConnectionInfo,
+  IAlert,
+  IHarvestingContext,
+} from "./core/typescript/interfaces";
 import { PriceContext } from "./core/context/priceContext";
 import BN from "bn.js";
 import { HarvestingContext } from "./core/context/harvestingContext";
-import Audits from "./pages/Audits";
 import Lottery from "./pages/Lottery";
 import { ThemeSetterContext } from "./core/context/themeSetterContext";
 
@@ -31,11 +33,14 @@ const App = () => {
   });
   const [alert, pushAlert] = useState<IAlert | null>(null);
   const [price, setPrice] = useState<BN | null>(null);
-  const [theme, setTheme] = useState<typeof lightMode | typeof darkMode>(lightMode);
-  const [harvestingContext, setHarvestingContext] = useState<IHarvestingContext>({
-    status: "loading",
-    nextHarvestingDate: null,
-  });
+  const [theme, setTheme] = useState<typeof lightMode | typeof darkMode>(
+    lightMode
+  );
+  const [harvestingContext, setHarvestingContext] =
+    useState<IHarvestingContext>({
+      status: "loading",
+      nextHarvestingDate: null,
+    });
 
   const getNextHarvestingDate = async () => {
     const _web3 = new Web3(PROVIDER_URL);
@@ -87,17 +92,11 @@ const App = () => {
                       <Route path={"/"} exact={true}>
                         <Home />
                       </Route>
-                      <Route path={"/guide/"} exact={true}>
-                        <Guide />
-                      </Route>
                       <Route path={"/pools/"} exact={true}>
                         <Pools />
                       </Route>
                       <Route path={"/farm/"} exact={true}>
                         <Farm />
-                      </Route>
-                      <Route path={"/audits/"} exact={true}>
-                        <Audits />
                       </Route>
                       <Route path={"/lottery/"} exact={true}>
                         <Lottery />

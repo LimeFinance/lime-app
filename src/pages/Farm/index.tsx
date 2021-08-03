@@ -15,7 +15,9 @@ import Skeleton from "react-loading-skeleton";
 const Farm = () => {
   const [loading, setLoading] = useState(true);
   const [fuse, setFuse] = useState<undefined | Fuse<IPool>>();
-  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>([]);
+  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>(
+    []
+  );
   const [pools, setPools] = useState<IPool[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const { tokenFarm } = useContracts();
@@ -25,7 +27,7 @@ const Farm = () => {
       const result = fuse.search(searchInput);
       setPoolsSearched(result);
     }
-  }, [searchInput, setSearchInput, fuse]);
+  }, [searchInput, setSearchInput]);
 
   useEffect(() => {
     let mounted = true;
@@ -52,7 +54,11 @@ const Farm = () => {
     return () => {
       mounted = false;
     };
-  }, [fuse, tokenFarm.methods]);
+  }, []);
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   return (
     <div style={{ minHeight: "130vh" }}>
@@ -68,7 +74,7 @@ const Farm = () => {
               <Searchbar
                 placeholder="Search pool..."
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={handleInputChange}
               />
             </>
           ) : (
@@ -80,10 +86,20 @@ const Farm = () => {
         {!loading ? (
           searchInput || poolsSearched.length ? (
             poolsSearched.map(({ item: pool }) => (
-              <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />
+              <StakingCard
+                pool={pool}
+                poolIndex={pool.index}
+                key={pool.index}
+              />
             ))
           ) : (
-            pools.map((pool) => <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />)
+            pools.map((pool) => (
+              <StakingCard
+                pool={pool}
+                poolIndex={pool.index}
+                key={pool.index}
+              />
+            ))
           )
         ) : (
           <Skeletons />

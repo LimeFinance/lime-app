@@ -17,6 +17,13 @@ export const PoolContainer = styled.section`
       display: none;
     }
   }
+  > section {
+    height: 390px;
+
+    &.expanded {
+      height: 92.5%;
+    }
+  }
 `;
 export const Placeholder = styled(Card)`
   grid-column: span 1;

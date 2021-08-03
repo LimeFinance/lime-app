@@ -7,19 +7,20 @@ import {
   Hero,
   HeroSvgWrapper,
   HeroText,
-  NormalText,
   Stat,
   StatsFlex,
 } from "./styles";
 import Overlay from "./Overlay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserFriends, faClock, faTicketAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserFriends,
+  faClock,
+  faTicketAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import BuyPopup from "./BuyPopup";
 import { useContracts } from "../../core/hooks/useContracts";
 import Skeleton from "react-loading-skeleton";
-import { addCommasToNumber, fromWei, roundString, trimAddress } from "../../core/utils";
-import Web3 from "web3";
-import { PROVIDER_URL } from "../../core/constants";
+import { fromWei, roundString, trimAddress } from "../../core/utils";
 import { useInterval } from "../../core/hooks/useInterval";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import TicketSlider from "./TicketSlider";
@@ -38,13 +39,21 @@ const Lottery = () => {
   const [userNumbers, setUserNumbers] = useState<undefined | number[]>();
 
   const fetchData = async () => {
-    setParticipants(Number(await lottery.methods.currLotteryParticipations().call()));
-    setTicketsBought(Number(await lottery.methods.getTotalTicketsBought().call()));
+    setParticipants(
+      Number(await lottery.methods.currLotteryParticipations().call())
+    );
+    setTicketsBought(
+      Number(await lottery.methods.getTotalTicketsBought().call())
+    );
     setPot(fromWei(await lottery.methods.getPot().call()));
     setLotteryState(await lottery.methods.lotteryState().call());
     setCurrWinner(await lottery.methods.currWinner().call());
     setLastWonAmount(await lottery.methods.lastWonAmount().call());
-    address && setUserNumbers(await lottery.methods.getUserNumbers().call({ from: address }));
+    if (address) {
+      setUserNumbers(
+        await lottery.methods.getUserNumbers().call({ from: address })
+      );
+    }
   };
 
   const handleBuyNumbers = (numbers: number[]) => {
@@ -67,7 +76,11 @@ const Lottery = () => {
         <Background />
       </BackgroundContainer>
       {showPopup && <Overlay onClick={toggleOverlay} />}
-      <BuyPopup onBuyNumbers={handleBuyNumbers} show={showPopup} onDismiss={toggleOverlay} />
+      <BuyPopup
+        onBuyNumbers={handleBuyNumbers}
+        show={showPopup}
+        onDismiss={toggleOverlay}
+      />
       <Hero>
         <HeroText>
           {userNumbers?.length ? (
@@ -102,15 +115,16 @@ const Lottery = () => {
                   </>
                 )}
                 {lotteryState === "1" && "And the winner is..."}
-                {lotteryState === "2" && "The lottery is calculating a winner..."}{" "}
+                {lotteryState === "2" &&
+                  "The lottery is calculating a winner..."}{" "}
                 {!lotteryState && <Skeleton />}
               </h1>
               <h5>
                 {lotteryState === "1" ? (
                   currWinner ? (
                     <>
-                      Address <b>{trimAddress(currWinner.owner)}</b> with the number{" "}
-                      <b>{currWinner.number}</b>!
+                      Address <b>{trimAddress(currWinner.owner)}</b> with the
+                      number <b>{currWinner.number}</b>!
                     </>
                   ) : (
                     <Skeleton />
@@ -135,8 +149,13 @@ const Lottery = () => {
                   <Skeleton />
                 )}
               </h3>
-              <CTA onClick={toggleOverlay} disabled={lotteryState && lotteryState === "1"}>
-                {lotteryState && lotteryState === "1" ? "Waiting for next lottery..." : "Enter now"}
+              <CTA
+                onClick={toggleOverlay}
+                disabled={lotteryState && lotteryState === "1"}
+              >
+                {lotteryState && lotteryState === "1"
+                  ? "Waiting for next lottery..."
+                  : "Enter now"}
               </CTA>
             </>
           )}
@@ -150,7 +169,9 @@ const Lottery = () => {
         <Stat>
           <FontAwesomeIcon icon={faUserFriends} size={"lg"} />
           <h5>
-            <span>{typeof participants !== undefined ? participants : <Skeleton />}</span>{" "}
+            <span>
+              {typeof participants !== undefined ? participants : <Skeleton />}
+            </span>{" "}
             participations
           </h5>
         </Stat>
@@ -163,8 +184,14 @@ const Lottery = () => {
         <Stat>
           <FontAwesomeIcon icon={faTicketAlt} size={"lg"} />
           <h5>
-            <span>{typeof ticketsBought !== undefined ? ticketsBought : <Skeleton />}</span> tickets
-            bought
+            <span>
+              {typeof ticketsBought !== undefined ? (
+                ticketsBought
+              ) : (
+                <Skeleton />
+              )}
+            </span>{" "}
+            tickets bought
           </h5>
         </Stat>
       </StatsFlex>

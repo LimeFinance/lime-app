@@ -9,7 +9,6 @@ import BN from "bn.js";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import { ADDRESSES, ONE_ETHER } from "../../core/constants";
 import { AlertContext } from "../../core/context/alertContext";
-import { useStateSafe } from "../../core/hooks/useStateSafe";
 
 interface BuyPopupProps {
   show: boolean;
@@ -21,23 +20,25 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
   const [{ address, network }] = useContext(ConnectionContext);
   const [, pushAlert] = useContext(AlertContext);
 
-  const [showPopup, setShowPopup] = useStateSafe(false);
-  const [ticketPrice, setTicketPrice] = useStateSafe<undefined | number>();
-  const [ticketPriceBN, setTicketPriceBN] = useStateSafe<undefined | BN>();
-  const [userLimeBalance, setUserLimeBalance] = useStateSafe<BN>(new BN("0"));
-  const [loading, setLoading] = useStateSafe<undefined | boolean>();
-  const [generating, setGenerating] = useStateSafe<undefined | boolean>();
-  const [approving, setApproving] = useStateSafe<undefined | boolean>();
+  const [showPopup, setShowPopup] = useState(false);
+  const [ticketPrice, setTicketPrice] = useState<undefined | number>();
+  const [ticketPriceBN, setTicketPriceBN] = useState<undefined | BN>();
+  const [userLimeBalance, setUserLimeBalance] = useState<BN>(new BN("0"));
+  const [loading, setLoading] = useState<undefined | boolean>();
+  const [generating, setGenerating] = useState<undefined | boolean>();
+  const [approving, setApproving] = useState<undefined | boolean>();
   const [amountToBuy, setAmountToBuy] = useState<undefined | number>();
   const { lottery, limeToken } = useContracts();
 
   const fetchData = async () => {
-    const ticketPriceBN = await lottery.methods.getTicketPrice().call();
+    const _ticketPriceBN = await lottery.methods.getTicketPrice().call();
     const _limeBalance = address && (await limeToken.methods.balanceOf(address).call());
 
-    setTicketPrice(Number(fromWei(ticketPriceBN)));
-    setTicketPriceBN(new BN(ticketPriceBN));
-    address && setUserLimeBalance(new BN(_limeBalance));
+    setTicketPrice(Number(fromWei(_ticketPriceBN)));
+    setTicketPriceBN(new BN(_ticketPriceBN));
+    if (address) {
+      setUserLimeBalance(new BN(_limeBalance));
+    }
   };
 
   const buyTickets = async () => {
@@ -116,6 +117,10 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
     fetchData();
   }, [address]);
 
+  const handleAmountInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setAmountToBuy(Number(e.target.value));
+  };
+
   return (
     <Popup show={showPopup}>
       <h3>
@@ -130,7 +135,7 @@ const BuyPopup: FC<BuyPopupProps> = ({ show, onDismiss, onBuyNumbers }) => {
         type="tel"
         maxLength={2}
         value={amountToBuy}
-        onChange={(e) => setAmountToBuy(Number(e.target.value))}
+        onChange={handleAmountInputChange}
       />
       <SameLine>
         <NormalText>Ticket price:</NormalText>

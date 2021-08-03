@@ -8,7 +8,9 @@ type dispatch<T> = React.Dispatch<React.SetStateAction<T>>;
  *
  * @param initialValue initial state value
  */
-export const useStateSafe = <T>(initialValue?: useStateSafeParams<T>): [T, dispatch<T>] => {
+export const useStateSafe = <T>(
+  initialValue?: useStateSafeParams<T>
+): [T, dispatch<T>] => {
   const [val, setVal] = useState<T>(initialValue);
   const mountedRef = useRef<boolean>();
   useEffect(() => {

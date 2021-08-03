@@ -3,12 +3,10 @@ import Input from "../Input";
 
 export const CardContainer = styled.section<{
   goldenShadow?: boolean;
-  expanded: boolean;
 }>`
   border-radius: 15px;
   position: relative;
   transition: 300ms;
-  height: 390px;
   max-width: 475px;
   justify-self: center;
   overflow: hidden;
@@ -17,12 +15,6 @@ export const CardContainer = styled.section<{
     props.goldenShadow
       ? `0px 4px 18px 10px rgba(85, 251, 57, 0.25);`
       : `0px 6px 14px rgba(219, 219, 219, 0.25)`};
-
-  ${(props) =>
-    props.expanded &&
-    css`
-      height: 92.5%;
-    `}
 `;
 
 export const PoolWrapper = styled.div`

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Title from "../../components/Title";
-import Subtitle from "../../components/Subtitle";
 import { useContracts } from "../../core/hooks/useContracts";
 import { IPool } from "../../core/typescript/interfaces";
 import StakingCard from "../../components/StakingCard";
@@ -16,7 +15,9 @@ import Skeleton from "react-loading-skeleton";
 const Pools = () => {
   const [loading, setLoading] = useState(false);
   const [fuse, setFuse] = useState<undefined | Fuse<IPool>>();
-  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>([]);
+  const [poolsSearched, setPoolsSearched] = useState<Fuse.FuseResult<IPool>[]>(
+    []
+  );
   const [pools, setPools] = useState<IPool[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const { tokenFarm } = useContracts();
@@ -56,6 +57,12 @@ const Pools = () => {
     };
   }, []);
 
+  const handleSearchChanged: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    setSearchInput(e.target.value);
+  };
+
   return (
     <div style={{ minHeight: "130vh" }}>
       <Title>
@@ -70,7 +77,7 @@ const Pools = () => {
               <Searchbar
                 placeholder="Search pool..."
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={handleSearchChanged}
               />
             </>
           ) : (
@@ -82,10 +89,20 @@ const Pools = () => {
         {!loading ? (
           searchInput || poolsSearched.length ? (
             poolsSearched.map(({ item: pool }) => (
-              <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />
+              <StakingCard
+                pool={pool}
+                poolIndex={pool.index}
+                key={pool.index}
+              />
             ))
           ) : (
-            pools.map((pool) => <StakingCard pool={pool} poolIndex={pool.index} key={pool.index} />)
+            pools.map((pool) => (
+              <StakingCard
+                pool={pool}
+                poolIndex={pool.index}
+                key={pool.index}
+              />
+            ))
           )
         ) : (
           <Skeletons />

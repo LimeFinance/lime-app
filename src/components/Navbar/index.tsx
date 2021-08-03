@@ -15,7 +15,7 @@ import Button from "../Button";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import { AlertContext } from "../../core/context/alertContext";
 import { PriceContext } from "../../core/context/priceContext";
-import { fromWei, roundString } from "../../core/utils";
+import { fromWei, roundString, trimAddress } from "../../core/utils";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import Skeleton from "react-loading-skeleton";
 import SideMenu from "./SideMenu";
@@ -24,7 +24,8 @@ import { faBars, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { _connectToWeb3 } from "./web3connections";
 
 const Navbar = () => {
-  const [{ address: account, network }, setConnectionInfo] = useContext(ConnectionContext);
+  const [{ address: account, network }, setConnectionInfo] =
+    useContext(ConnectionContext);
   const [loading, setLoading] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [, pushAlert] = useContext(AlertContext);
@@ -54,7 +55,9 @@ const Navbar = () => {
         <DesktopNav>
           <PriceContainer>
             <Logo />
-            <h5>{price ? roundString(fromWei(price), 5) + "$" : <Skeleton />}</h5>
+            <h5>
+              {price ? roundString(fromWei(price), 5) + "$" : <Skeleton />}
+            </h5>
           </PriceContainer>
           <LinkList>
             <Link to={"/"}>Home</Link>
@@ -64,15 +67,15 @@ const Navbar = () => {
               Lottery
               <FontAwesomeIcon icon={faExclamationCircle} />
             </Link>
-            <Link to={"/audits/"}>Audits</Link>
-            <Link to={"/guide/"}>Guide</Link>
+            <a href="https://info.limefinance.org">Guide</a>
           </LinkList>
           {account ? (
-            <Address>
-              {account.slice(0, 5)}...{account.slice(32, account.length)}
-            </Address>
+            <Address>{trimAddress(account)}</Address>
           ) : (
-            <Button onClick={connectToWeb3} disabled={loading || network === "invalid"}>
+            <Button
+              onClick={connectToWeb3}
+              disabled={loading || network === "invalid"}
+            >
               {loading && "Loading..."}
               {network === "invalid" && "Connect to BSC"}
               {!loading && network !== "invalid" && "Connect wallet"}
@@ -85,9 +88,7 @@ const Navbar = () => {
           </SideMenuToggle>
 
           {account ? (
-            <Address>
-              {account.slice(0, 5)}...{account.slice(32, account.length)}
-            </Address>
+            <Address>{trimAddress(account)}</Address>
           ) : (
             <MobileConnectButton
               onClick={connectToWeb3}

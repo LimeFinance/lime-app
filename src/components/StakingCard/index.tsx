@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { IPool } from "../../core/typescript/interfaces";
 import {
   StakingContainer,
@@ -26,14 +26,12 @@ import { ReactComponent as TaxFreeLabel } from "../../assets/images/tax-free.svg
 import BN from "bn.js";
 import { useContext } from "react";
 import { PriceContext } from "../../core/context/priceContext";
-import { useState } from "react";
 import { AlertContext } from "../../core/context/alertContext";
 import { useContracts } from "../../core/hooks/useContracts";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import { useEffect } from "react";
 import CardSlide from "./CardSlide";
 import Skeleton from "react-loading-skeleton";
-import { useStateSafe } from "../../core/hooks/useStateSafe";
 
 interface StakingCardProps {
   pool: IPool;
@@ -41,13 +39,13 @@ interface StakingCardProps {
 }
 
 const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
-  const [showCurrency, setShowCurrency] = useStateSafe(false);
-  const [stakeAmountInput, setStakeAmountInput] = useStateSafe<undefined | string>();
-  const [userTokenBalance, setUserTokenBalance] = useStateSafe<undefined | string>();
-  const [showCardSlide, setShowCardSlide] = useStateSafe(false);
+  const [showCurrency, setShowCurrency] = useState(false);
+  const [stakeAmountInput, setStakeAmountInput] = useState<undefined | string>();
+  const [userTokenBalance, setUserTokenBalance] = useState<undefined | string>();
+  const [showCardSlide, setShowCardSlide] = useState(false);
 
   const { getBep20, tokenFarm } = useContracts();
-  const [loading, setLoading] = useStateSafe(false);
+  const [loading, setLoading] = useState(false);
   const [{ network, address }] = useContext(ConnectionContext);
   const [, pushAlert] = useContext(AlertContext);
   const [lemonPrice] = useContext(PriceContext);
@@ -101,8 +99,31 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
   const poolSize = new BN(pool.poolSize !== "0" ? pool.poolSize : new BN(tokens("1")));
   const Image = pools[poolIndex].image;
 
+  const handleStakeInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setStakeAmountInput(e.target.value);
+  };
+
+  const toggleCardSlide = () => {
+    setShowCardSlide(!showCardSlide);
+  };
+
+  const handleMaxClicked = () => {
+    setStakeAmountInput(userTokenBalance ? roundString(fromWei(userTokenBalance), 2) : "0");
+  };
+
+  const isStakingDisabled =
+    loading ||
+    network === "invalid" ||
+    !address ||
+    !stakeAmountInput ||
+    Number(stakeAmountInput) <= 0 ||
+    Number(fromWei(userTokenBalance || "0")) < Number(stakeAmountInput);
+
   return (
-    <CardContainer goldenShadow={pools[poolIndex].isFeatured} expanded={showCardSlide}>
+    <CardContainer
+      goldenShadow={pools[poolIndex].isFeatured}
+      className={showCardSlide ? "expanded" : ""}
+    >
       <StakingContainer>
         {pool.taxFree && <TaxFreeLabel />}
         {pools[poolIndex].name.includes("LP") ? (
@@ -130,35 +151,18 @@ const StakingCard: FC<StakingCardProps> = ({ pool, poolIndex }) => {
               placeholder="Enter amount..."
               onFocus={_toggleShowCurrency}
               onBlur={_toggleShowCurrency}
-              onChange={(e) => setStakeAmountInput(e.target.value)}
+              onChange={handleStakeInputChange}
               value={stakeAmountInput}
             />
-            <CurrencyIndicator
-              show={showCurrency}
-              onClick={() =>
-                setStakeAmountInput(
-                  userTokenBalance ? roundString(fromWei(userTokenBalance), 2) : "0"
-                )
-              }
-            >
+            <CurrencyIndicator show={showCurrency} onClick={handleMaxClicked}>
               max
             </CurrencyIndicator>
           </InputHolder>
-          <Button
-            disabled={
-              loading ||
-              network === "invalid" ||
-              !address ||
-              !stakeAmountInput ||
-              Number(stakeAmountInput) <= 0 ||
-              Number(fromWei(userTokenBalance || "0")) < Number(stakeAmountInput)
-            }
-            onClick={_stakeTokens}
-          >
+          <Button disabled={isStakingDisabled} onClick={_stakeTokens}>
             {loading ? "Loading..." : "Stake"}
           </Button>
         </StakeInputGroup>
-        <DetailsToggle onClick={() => setShowCardSlide(!showCardSlide)} rotateSvg={showCardSlide}>
+        <DetailsToggle onClick={toggleCardSlide} rotateSvg={showCardSlide}>
           <FontAwesomeIcon icon={faAngleDoubleDown} size={"xs"} /> {showCardSlide ? "Hide" : "Show"}{" "}
           details
         </DetailsToggle>

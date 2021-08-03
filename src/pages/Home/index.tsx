@@ -22,7 +22,7 @@ import firebase from "../../core/initFirebase";
 import { DEFAULT_NET, ONE_ETHER } from "../../core/constants";
 
 const Home = () => {
-  const [stats, loadingStats, statsError] = useDocument(
+  const [stats] = useDocument(
     firebase
       .firestore()
       .collection("networks")
@@ -40,8 +40,8 @@ const Home = () => {
       .collection("pools")
   );
 
-  const [{ address, network }] = useContext(ConnectionContext);
-  const { tokenFarm, limeToken, getBep20 } = useContracts();
+  const [{ address }] = useContext(ConnectionContext);
+  const { tokenFarm, limeToken } = useContracts();
   const [lemonPrice] = useContext(PriceContext);
 
   const [harvestAmount, setHarvestAmount] = useState<undefined | BN>();
@@ -57,7 +57,9 @@ const Home = () => {
     setBalance(_balance);
     for (const pool of poolCollection.docs) {
       if (address) {
-        const res = await tokenFarm.methods.userAvailableHarvest(pool.id).call({ from: address });
+        const res = await tokenFarm.methods
+          .userAvailableHarvest(pool.id)
+          .call({ from: address });
         lemons = lemons.add(new BN(res));
       }
     }
@@ -81,7 +83,8 @@ const Home = () => {
 
   useEffect(() => {
     let mounted = true;
-    if (!loadingPools && !poolsError && poolCollection && mounted) fetchEverything();
+    if (!loadingPools && !poolsError && poolCollection && mounted)
+      fetchEverything();
     return () => {
       mounted = false;
     };
@@ -106,7 +109,13 @@ const Home = () => {
             <span>worth of LIME</span>
           </Stat>
           <Stat>
-            <h4>{harvestAmount ? roundString(fromWei(harvestAmount), 2) : <Skeleton />}</h4>
+            <h4>
+              {harvestAmount ? (
+                roundString(fromWei(harvestAmount), 2)
+              ) : (
+                <Skeleton />
+              )}
+            </h4>
             <span>LIME to harvest</span>
           </Stat>
           <Stat>
@@ -120,7 +129,8 @@ const Home = () => {
             <Stat>
               <h2>
                 {stats ? (
-                  "$" + addCommasToNumber(roundString(stats.data().tvl.toString(), 2))
+                  "$" +
+                  addCommasToNumber(roundString(stats.data().tvl.toString(), 2))
                 ) : (
                   <Skeleton />
                 )}

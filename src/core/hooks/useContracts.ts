@@ -7,13 +7,13 @@ import { abi as LotteryAbi } from "../../assets/contracts/Lottery.json";
 import { AbiItem } from "web3-utils";
 import { ADDRESSES, DEFAULT_NET } from "../constants";
 
-interface useContractsReturnValue {
+interface IUseContracts {
   tokenFarm: Contract;
   limeToken: Contract;
   lottery: Contract;
   getBep20: (address: string) => Contract;
 }
-export const useContracts = (): useContractsReturnValue => {
+export const useContracts = (): IUseContracts => {
   const [{ web3, network }] = useContext(ConnectionContext);
   let net = network;
   if (network === "invalid") net = DEFAULT_NET;
