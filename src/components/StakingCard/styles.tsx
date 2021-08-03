@@ -8,7 +8,7 @@ export const CardContainer = styled.section<{
   border-radius: 15px;
   position: relative;
   transition: 300ms;
-  height: 370px;
+  height: 390px;
   max-width: 475px;
   justify-self: center;
   overflow: hidden;

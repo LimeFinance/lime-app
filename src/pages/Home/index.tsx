@@ -13,7 +13,6 @@ import {
 import BN from "bn.js";
 import { ConnectionContext } from "../../core/context/connectionContext";
 import { useDocument, useCollection } from "react-firebase-hooks/firestore";
-import { IPool, IPoolMeta, IPoolWithMeta } from "../../core/typescript/interfaces";
 import { useContracts } from "../../core/hooks/useContracts";
 import { addCommasToNumber, fromWei, roundString } from "../../core/utils";
 import { useEffect } from "react";
@@ -49,7 +48,6 @@ const Home = () => {
   const [balance, setBalance] = useState<undefined | BN>();
   const [busdBalance, setBusdBalance] = useState<undefined | number>();
   const [totalPools, setTotalPools] = useState<undefined | number>();
-  const [hottestPool, setHottestPool] = useState<undefined | string>();
   const [featuredPools, setFeaturedPools] = useState<undefined | any>();
 
   const _fetchHarvests = async () => {
