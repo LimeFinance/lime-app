@@ -56,6 +56,7 @@ export const UserInfoCard = styled(Card)`
 `;
 export const FeaturedPool = styled(Card)`
   grid-row: span 1;
+  max-height: 252px;
   padding: 0.75rem 1.75rem;
 
   ${breakpoint("tablet")`
