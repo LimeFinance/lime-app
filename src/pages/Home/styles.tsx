@@ -56,7 +56,9 @@ export const UserInfoCard = styled(Card)`
 `;
 export const FeaturedPool = styled(Card)`
   grid-row: span 1;
-  max-height: 252px;
+  box-sizing: border-box;
+  max-height: 282px;
+  max-width: 350px;
   padding: 0.75rem 1.75rem;
 
   ${breakpoint("tablet")`
@@ -72,6 +74,8 @@ export const FeaturedPool = styled(Card)`
   @media (max-width: 1000px) {
     grid-column: span 6;
     grid-row: span 4;
+    min-width: 340px;
+    justify-self: center;
   }
   @media (max-width: 737px) {
     grid-column: span 12;
@@ -101,7 +105,59 @@ export const Placeholder = styled.div`
   width: 100%;
 `;
 
-export const Ad = styled.section`
-  grid-row: span 4;
+export const Ad = styled(Card)`
   grid-column: span 6;
+  grid-row: span 4;
+  box-sizing: border-box;
+  padding: 0.5rem 2.25rem;
+  max-height: 282px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+
+  // The lime logo
+  > svg {
+    position: absolute;
+    z-index: 1;
+    right: -15%;
+    top: -10%;
+    opacity: 0.4;
+    width: 60%;
+  }
+
+  h2 {
+    position: relative;
+    z-index: 2;
+    span {
+      color: ${(props) => props.theme.colors.toned};
+    }
+  }
+
+  a {
+    font-size: 1.75rem;
+    font-family: "Avenir-regular";
+    cursor: pointer;
+    transition: 300ms;
+    color: ${(props) => props.theme.colors.text};
+    text-decoration: none;
+
+    &:hover {
+      transform: translateX(1%);
+      color: ${(props) => props.theme.colors.toned};
+      svg {
+        color: ${(props) => props.theme.colors.toned};
+      }
+    }
+  }
+
+  @media (max-width: 1700px) {
+    grid-column: span 4;
+    grid-row: span 4;
+  }
+  @media (max-width: 1000px) {
+    grid-column: span 12;
+  }
 `;

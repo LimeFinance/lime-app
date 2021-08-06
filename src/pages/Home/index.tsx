@@ -20,6 +20,10 @@ import { PriceContext } from "../../core/context/priceContext";
 import FeaturedCard from "./FeaturedCard";
 import firebase from "../../core/initFirebase";
 import { DEFAULT_NET, ONE_ETHER } from "../../core/constants";
+import CountdownText from "./countdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
+import { ReactComponent as Lime } from "../../assets/images/logo.svg";
 
 const Home = () => {
   const [stats] = useDocument(
@@ -57,9 +61,7 @@ const Home = () => {
     setBalance(_balance);
     for (const pool of poolCollection.docs) {
       if (address) {
-        const res = await tokenFarm.methods
-          .userAvailableHarvest(pool.id)
-          .call({ from: address });
+        const res = await tokenFarm.methods.userAvailableHarvest(pool.id).call({ from: address });
         lemons = lemons.add(new BN(res));
       }
     }
@@ -83,8 +85,7 @@ const Home = () => {
 
   useEffect(() => {
     let mounted = true;
-    if (!loadingPools && !poolsError && poolCollection && mounted)
-      fetchEverything();
+    if (!loadingPools && !poolsError && poolCollection && mounted) fetchEverything();
     return () => {
       mounted = false;
     };
@@ -109,13 +110,7 @@ const Home = () => {
             <span>worth of LIME</span>
           </Stat>
           <Stat>
-            <h4>
-              {harvestAmount ? (
-                roundString(fromWei(harvestAmount), 2)
-              ) : (
-                <Skeleton />
-              )}
-            </h4>
+            <h4>{harvestAmount ? roundString(fromWei(harvestAmount), 2) : <Skeleton />}</h4>
             <span>LIME to harvest</span>
           </Stat>
           <Stat>
@@ -129,8 +124,7 @@ const Home = () => {
             <Stat>
               <h2>
                 {stats ? (
-                  "$" +
-                  addCommasToNumber(roundString(stats.data().tvl.toString(), 2))
+                  "$" + addCommasToNumber(roundString(stats.data().tvl.toString(), 2))
                 ) : (
                   <Skeleton />
                 )}
@@ -147,7 +141,16 @@ const Home = () => {
             </Stat>
           </StatsContainer>
         </UserInfoCard>
-        {/* <Ad></Ad> */}
+        <Ad>
+          <Lime />
+          <h2>
+            <span>Presale</span>
+            <CountdownText />
+          </h2>
+          <a href="https://app.unicrypt.network/amm/pancake-v2/ilo/0x5fed2ba0bef64a95c5e5f4be544af32e0360054e">
+            <FontAwesomeIcon icon={faAngleDoubleRight} size={"sm"} /> Check it out
+          </a>
+        </Ad>
         <FeaturedCard
           pool={featuredPools && featuredPools[0]}
           loading={!(featuredPools && lemonPrice)}

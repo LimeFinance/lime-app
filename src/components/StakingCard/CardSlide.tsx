@@ -17,12 +17,7 @@ import Button from "../Button";
 import Input from "../Input";
 import { useInterval } from "../../core/hooks/useInterval";
 import { HarvestingContext } from "../../core/context/harvestingContext";
-import {
-  ADDRESSES,
-  DAY_SECONDS,
-  DEFAULT_NET,
-  PROVIDER_URL,
-} from "../../core/constants";
+import { ADDRESSES, DAY_SECONDS, DEFAULT_NET, PROVIDER_URL } from "../../core/constants";
 import Skeleton from "react-loading-skeleton";
 import Web3 from "web3";
 import pools from "../../core/pools";
@@ -37,6 +32,7 @@ interface CardSlideProps {
 const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
   const [userStake, setUserStake] = useState<null | string>(null);
   const [userLemons, setUserLemons] = useState<null | string>(null);
+  const [securedLime, setSecuredLime] = useState<null | string>(null);
   const [poolSizeBusd, setPoolSizeBusd] = useState<undefined | BN>();
   const [amountToWithdraw, setAmountToWithdraw] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,15 +45,18 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
   const _fetchData = async () => {
     if (address && address.length === 42) {
       try {
-        const stake = await tokenFarm.methods
-          .userStakeInPool(pool.index)
-          .call({ from: address });
+        const stake = await tokenFarm.methods.userStakeInPool(pool.index).call({ from: address });
         const lemons = await tokenFarm.methods
           .userAvailableHarvest(pool.index)
           .call({ from: address });
+        const _securedLime = await tokenFarm.methods
+          .userDebtInPool(pool.index)
+          .call({ from: address });
 
+        console.log(_securedLime);
+        setSecuredLime(_securedLime);
         setUserStake(stake);
-        setUserLemons(lemons);
+        setUserLemons(new BN(lemons).sub(new BN(_securedLime)).toString());
       } catch (e) {
         console.error(e);
         pushAlert({
@@ -134,9 +133,7 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
     setAmountToWithdraw(e.target.value);
 
   const isHarvestingDisabled =
-    loading ||
-    status === "loading" ||
-    +nextHarvestingDate! - +Date.now() > DAY_SECONDS;
+    loading || status === "loading" || +nextHarvestingDate! - +Date.now() > DAY_SECONDS;
 
   return (
     <CardSlideContainer show={show}>
@@ -154,12 +151,18 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
       </SameLineFlex>
       <SameLineFlex>
         <div>
-          <span>Earned rewards (LIME):</span>
+          <span>Unsecured rewards (LIME):</span>
           <h5>{userLemons && roundString(fromWei(userLemons), 4)}</h5>
         </div>
         <Button disabled={isHarvestingDisabled} onClick={_harvestTokens}>
           {loading ? "Loading..." : "Harvest"}
         </Button>
+      </SameLineFlex>
+      <SameLineFlex>
+        <div>
+          <span>Secured rewards (LIME):</span>
+          <h5>{securedLime ? roundString(fromWei(securedLime), 4) : "0"}</h5>
+        </div>
       </SameLineFlex>
 
       <SameLineFlex>
@@ -171,12 +174,7 @@ const CardSlide: FC<CardSlideProps> = ({ show, pool, unit }) => {
           </h5>
         </div>
         <InputGroup>
-          <Input
-            type="number"
-            min="0"
-            placeholder={unit}
-            onChange={handleInputChange}
-          />
+          <Input type="number" min="0" placeholder={unit} onChange={handleInputChange} />
           <Button
             type="outlined"
             disabled={

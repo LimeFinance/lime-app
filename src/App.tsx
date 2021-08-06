@@ -14,11 +14,7 @@ import { AlertContext } from "./core/context/alertContext";
 import Alert from "./components/Alert";
 import { PROVIDER_URL, DEFAULT_NET, DAY_SECONDS } from "./core/constants";
 import PriceUpdater from "./components/PriceUpdater";
-import {
-  IConnectionInfo,
-  IAlert,
-  IHarvestingContext,
-} from "./core/typescript/interfaces";
+import { IConnectionInfo, IAlert, IHarvestingContext } from "./core/typescript/interfaces";
 import { PriceContext } from "./core/context/priceContext";
 import BN from "bn.js";
 import { HarvestingContext } from "./core/context/harvestingContext";
@@ -33,14 +29,11 @@ const App = () => {
   });
   const [alert, pushAlert] = useState<IAlert | null>(null);
   const [price, setPrice] = useState<BN | null>(null);
-  const [theme, setTheme] = useState<typeof lightMode | typeof darkMode>(
-    lightMode
-  );
-  const [harvestingContext, setHarvestingContext] =
-    useState<IHarvestingContext>({
-      status: "loading",
-      nextHarvestingDate: null,
-    });
+  const [theme, setTheme] = useState<typeof lightMode | typeof darkMode>(lightMode);
+  const [harvestingContext, setHarvestingContext] = useState<IHarvestingContext>({
+    status: "loading",
+    nextHarvestingDate: null,
+  });
 
   const getNextHarvestingDate = async () => {
     const _web3 = new Web3(PROVIDER_URL);
@@ -50,7 +43,7 @@ const App = () => {
 
     if (typeof timestamp === "string") return;
 
-    const r = (timestamp + DAY_SECONDS * 2) % (DAY_SECONDS * 14);
+    const r = (timestamp - DAY_SECONDS * 2) % (DAY_SECONDS * 14);
     if (r < DAY_SECONDS) {
       setHarvestingContext({ status: "done", nextHarvestingDate: new Date() });
       return;
