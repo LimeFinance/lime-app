@@ -7,7 +7,7 @@ export const AlertContainer = styled(Card)<{ show: boolean }>`
   padding: 1.75em;
   z-index: 9;
   top: 10%;
-  max-height: 120px;
+  max-height: 140px;
   max-width: 300px;
   opacity: 0;
   right: 0%;
